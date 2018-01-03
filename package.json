@@ -1,0 +1,16 @@
+{
+  "name": "news-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Turturika",
+  "license": "MIT",
+  "dependencies": {
+    "restify": "^6.3.4",
+    "restify-errors": "^5.0.0"
+  }
+}
