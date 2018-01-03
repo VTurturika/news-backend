@@ -2,16 +2,24 @@
 
 const restify = require('restify');
 const server = restify.createServer();
-const port = process.env.PORT || 8080;
+const constants = require('./constants');
+const init = require('./init');
 
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.fullResponse());
 
-server.get('/', (req, res) => {
-  res.end('hello');
-});
+Promise.resolve()
+  .then(() => init.database(constants))
+  .then(db => init.controllers(server, db))
+  .then(() => server.listen(constants.server.port, onServerStarted))
+  .catch(err => onServerFailed(err));
 
-server.listen(port, () => {
-  console.log(`${server.name} listening at ${port}`);
-});
+function onServerStarted() {
+  console.log(`${server.name} listening at ${server.url}`)
+}
+
+function onServerFailed(err) {
+  console.log(err);
+  process.exit(1);
+}
