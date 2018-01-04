@@ -1,5 +1,8 @@
 # REST API
 
+Entities:
+- [Article](#article)
+
 ## Article
 
 | Action | Method | Endpoint |
