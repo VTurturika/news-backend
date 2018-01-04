@@ -54,7 +54,13 @@ class ArticleController extends Controller {
   }
 
   del(req, res) {
-    res.end('delete /article/:id');
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'id'))
+      .then(id => instance.model.validateId(req.params.id))
+      .then(id => instance.model.get(id))
+      .then(article => instance.model.del(article))
+      .then(article => res.send(article))
+      .catch(err => res.send(err));
   }
 }
 

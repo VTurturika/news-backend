@@ -33,6 +33,21 @@ class Article extends Model {
         .then(article => {
           return article
             ? resolve(article)
+            : reject(new this.error.NotFoundError('Article not found'));
+        })
+        .catch(err => reject(err))
+    })
+  }
+
+  del(article) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .deleteOne({
+          _id: article._id
+        })
+        .then(result => {
+          return result && result.deletedCount
+            ? resolve(article)
             : reject(new this.error.InternalServerError('Database error'));
         })
         .catch(err => reject(err))
