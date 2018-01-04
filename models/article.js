@@ -11,6 +11,20 @@ class Article extends Model {
     ]);
   }
 
+  create(article) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .insertOne(article)
+        .then(result => {
+          return result && result.insertedId
+            ? resolve(article)
+            : reject(new this.error.InternalServerError('Database error'));
+        })
+        .catch(err => reject(err))
+    })
+  }
+
+
   getArticles() {
     return new Promise((resolve, reject) => {
       this.db.collection('articles')

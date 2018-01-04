@@ -22,7 +22,15 @@ class ArticleController extends Controller {
   }
 
   create(req, res) {
-    res.end('post /article');
+    Promise.resolve()
+      .then(() => instance.isExist(req, 'title'))
+      .then(() => instance.isExist(req, 'description'))
+      .then(() => instance.isExist(req, 'text'))
+      .then(() => instance.isExist(req, 'description_image'))
+      .then(() => instance.model.filterAllowedFields(req.body))
+      .then(article => instance.model.create(article))
+      .then(article => res.send(article))
+      .catch(err => res.send(err))
   }
 
   getOne(req, res) {
