@@ -1,13 +1,14 @@
 'use strict';
 
 const entities = ['article'];
+const modelsDir = '../models/';
+const controllersDir = '../controllers/';
 
 function initDatabase(constants) {
 
   return new Promise((resolve, reject) => {
     const mongodb = require('mongodb').MongoClient;
-    const url = 'mongodb://localhost:27017';
-    mongodb.connect(url)
+    mongodb.connect(constants.database.endpoint)
       .then(conn => resolve(conn.db(constants.database.name)))
       .catch(err => reject(err));
   })
@@ -17,8 +18,8 @@ function initControllers(server, db) {
 
   return new Promise((resolve, reject) => {
     entities.forEach(entity => {
-      let model = require(`./models/${entity}`)[entity];
-      let controller = require(`./controllers/${entity}`)[entity];
+      let model = require(modelsDir + entity)[entity];
+      let controller = require(controllersDir + entity)[entity];
       new controller(server, new model(db));
     });
     resolve();

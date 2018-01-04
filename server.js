@@ -2,8 +2,8 @@
 
 const restify = require('restify');
 const server = restify.createServer();
-const constants = require('./constants');
-const init = require('./init');
+const constants = require('./config/constants');
+const init = require('./config/init');
 
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
