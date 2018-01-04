@@ -9,6 +9,7 @@ class Model {
     this.db = db;
     this.error = error;
     this.allowedFields = allowedFields;
+    this.ObjectID = ObjectID;
   }
 
   filterAllowedFields(rawData) {
@@ -27,7 +28,7 @@ class Model {
 
   validateId(id) {
     return new Promise((resolve, reject) => {
-      return ObjectID.isValid(id)
+      return this.ObjectID.isValid(id)
         ? resolve(id)
         : reject(new this.error.BadRequestError('id is invalid'))
     });

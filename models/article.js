@@ -24,6 +24,20 @@ class Article extends Model {
     })
   }
 
+  get(id) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .findOne({
+          _id: this.ObjectID.createFromHexString(id)
+        })
+        .then(article => {
+          return article
+            ? resolve(article)
+            : reject(new this.error.InternalServerError('Database error'));
+        })
+        .catch(err => reject(err))
+    })
+  }
 
   getArticles() {
     return new Promise((resolve, reject) => {

@@ -10,7 +10,7 @@ class ArticleController extends Controller {
 
     if(!instance) {
       server.post('/article', this.create);
-      server.get('/article/:id', this.getOne);
+      server.get('/article/:id', this.get);
       server.get('/article', this.getAll);
       server.put('/article/:id', this.update);
       server.del('/article/:id', this.del);
@@ -33,8 +33,13 @@ class ArticleController extends Controller {
       .catch(err => res.send(err))
   }
 
-  getOne(req, res) {
-    res.end('get /article/:id');
+  get(req, res) {
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'id'))
+      .then(id => instance.model.validateId(req.params.id))
+      .then(id => instance.model.get(id))
+      .then(article => res.send(article))
+      .catch(err => res.send(err));
   }
 
   getAll(req, res) {
