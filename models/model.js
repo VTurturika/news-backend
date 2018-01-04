@@ -1,6 +1,7 @@
 'use strict';
 
 const error = require('restify-errors');
+const ObjectID = require('mongodb').ObjectID;
 
 class Model {
 
@@ -11,7 +12,6 @@ class Model {
   }
 
   filterAllowedFields(rawData) {
-
     return new Promise((resolve, reject) => {
       let filteredData = {};
       this.allowedFields.forEach(field => {
@@ -24,6 +24,15 @@ class Model {
         : reject(new this.error.BadRequestError('Invalid request body'))
     });
   }
+
+  validateId(id) {
+    return new Promise((resolve, reject) => {
+      return ObjectID.isValid(id)
+        ? resolve(id)
+        : reject(new this.error.BadRequestError('id is invalid'))
+    });
+  }
+
 }
 
 module.exports = {
