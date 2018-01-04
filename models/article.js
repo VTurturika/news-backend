@@ -5,7 +5,10 @@ const Model = require('./model').Model;
 class Article extends Model {
 
   constructor(db) {
-    super(db);
+    super(db, [
+      'title', 'description', 'text',
+      'description_image', 'images', 'categories', 'tags'
+    ]);
   }
 
   getArticles() {
