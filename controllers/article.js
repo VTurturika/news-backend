@@ -23,10 +23,10 @@ class ArticleController extends Controller {
 
   create(req, res) {
     Promise.resolve()
-      .then(() => instance.isExist(req, 'title'))
-      .then(() => instance.isExist(req, 'description'))
-      .then(() => instance.isExist(req, 'text'))
-      .then(() => instance.isExist(req, 'description_image'))
+      .then(() => instance.isExistField(req, 'title'))
+      .then(() => instance.isExistField(req, 'description'))
+      .then(() => instance.isExistField(req, 'text'))
+      .then(() => instance.isExistField(req, 'description_image'))
       .then(() => instance.model.filterAllowedFields(req.body))
       .then(article => instance.model.create(article))
       .then(article => res.send(article))

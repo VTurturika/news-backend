@@ -4,7 +4,7 @@ const error = require('restify-errors');
 
 class Controller {
 
-  isExist(req, field) {
+  isExistField(req, field) {
     return new Promise((resolve, reject) => {
       return req.body && req.body[field] !== undefined
         ? resolve()
