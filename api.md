@@ -22,7 +22,7 @@
 }
 ```
 
-##### Response
+#### Response
 * 200
 ```javascript
 {
@@ -47,7 +47,7 @@
 #### Query
 #### Request
 
-##### Response
+#### Response
 * 200
 ```javascript
 {
