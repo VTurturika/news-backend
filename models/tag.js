@@ -5,7 +5,7 @@ const Model = require('./model').Model;
 class Tag extends Model {
 
   constructor(db) {
-    super(db, []);
+    super(db);
   }
 
   getAll() {

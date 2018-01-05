@@ -8,7 +8,7 @@ class Model {
   constructor(db, allowedFields) {
     this.db = db;
     this.error = error;
-    this.allowedFields = allowedFields;
+    this.allowedFields = allowedFields || [];
     this.ObjectID = ObjectID;
   }
 
