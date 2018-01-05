@@ -41,35 +41,37 @@ class Article extends Model {
 
   update(id, newData) {
     return new Promise((resolve, reject) => {
-      this.db.collection('articles')
-        .updateOne({
-          _id: this.ObjectID.createFromHexString(id)
-        },
-          Article.prepareForUpdate(newData)
+      Promise.resolve()
+        .then(() => this.get(id)) // try to get article
+        .then(article => this.db.collection('articles') //update article
+          .updateOne({
+              _id: this.ObjectID.createFromHexString(id)
+            },
+            Article.prepareForUpdate(newData, article)
+          )
         )
         .then(response => {
           return response && response.result && response.result.ok
-            ? resolve(id)
+            ? this.get(id)
             : reject(new this.error.InternalServerError('Article not updated'))
         })
+        .then(article => resolve(article)) //return updated article
         .catch(err => reject(err))
     })
   }
 
-  static prepareForUpdate(newData) {
-
-    let updateObject = {};
+  static prepareForUpdate(newData, article) {
 
     if(newData.tags) { //need update tags
+
+      let tags = Article.arrayToObject(article.tags);
 
       if(newData.tags.add &&
         Array.isArray(newData.tags.add) &&
         newData.tags.add.length > 0 &&
         newData.tags.add.every(tag => typeof tag === 'string')
       ) {
-        updateObject.$addToSet = {
-          tags: {$each : newData.tags.add} //add tags
-        }
+        newData.tags.add.forEach(tag => tags[tag] = true) //add tags
       }
 
       if(newData.tags.remove &&
@@ -77,16 +79,20 @@ class Article extends Model {
         newData.tags.remove.length > 0 &&
         newData.tags.remove.every(tag => typeof tag === 'string')
       ) {
-        updateObject.$pullAll = {
-          tags: newData.tags.remove //remove tags
-        }
+        newData.tags.remove.forEach(tag => delete tags[tag]) //remove tags
       }
 
-      delete newData.tags;
+      newData.tags = Object.keys(tags); //set merged tags
     }
-    updateObject.$set = newData;
 
-    return updateObject;
+    return {$set: newData};
+  }
+
+  static arrayToObject(array) {
+    return array.reduce((result, item) => {
+      result[item] = true;
+      return result;
+    }, {})
   }
 
   del(article) {
