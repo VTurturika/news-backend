@@ -9,7 +9,24 @@ class Tag extends Model {
   }
 
   getAll() {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .aggregate([
+          { $unwind: "$tags" },
+          { $group: {_id: null, tags: {$addToSet: "$tags"}} }
+        ])
+        .toArray()
+        .then(response => {
 
+          let result = {tags: []};
+          if(response.length > 0) {
+            delete response[0]._id;
+            result = response[0];
+          }
+          resolve(result);
+        })
+        .catch(err => reject(err))
+    });
   }
 
 }

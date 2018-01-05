@@ -20,7 +20,10 @@ class TagController extends Controller {
   }
 
   getAll(req, res) {
-   res.send('GET /tag');
+    Promise.resolve()
+      .then(() => instance.model.getAll())
+      .then(result => res.send(result))
+      .catch(err => res.send(err));
   }
 
   change(req, res) {

@@ -2,6 +2,7 @@
 
 Entities:
 - [Article](#article)
+- [Tag](#tag)
 
 ## Article
 
@@ -149,5 +150,22 @@ Entities:
 {
     "code": "NotFound",
     "message": "Article not found"
+}
+```
+
+## Tag
+
+| Action | Method | Endpoint |
+| ----------- | ------ | -------- |
+| [Get all tags](#get-all-tags) | GET | /tag |
+
+### Get all tags
+#### Query
+#### Request
+#### Response
+* 200
+```javascript
+{
+   "tags": ["1", "2", "3"]
 }
 ```
