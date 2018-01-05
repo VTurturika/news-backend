@@ -1,6 +1,6 @@
 'use strict';
 
-const entities = ['article'];
+const entities = ['article', 'tag'];
 const modelsDir = '../models/';
 const controllersDir = '../controllers/';
 
