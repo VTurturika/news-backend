@@ -50,7 +50,15 @@ class ArticleController extends Controller {
   }
 
   update(req, res) {
-    res.end('put /article/:id');
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'id'))
+      .then(id => instance.model.validateId(req.params.id))
+      .then(id => instance.model.get(id))
+      .then(() => instance.model.filterAllowedFields(req.body))
+      .then(article => instance.model.update(req.params.id, article))
+      .then(id => instance.model.get(id))
+      .then(article => res.send(article))
+      .catch(err => res.send(err));
   }
 
   del(req, res) {

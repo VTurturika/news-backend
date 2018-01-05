@@ -7,7 +7,7 @@ class Article extends Model {
   constructor(db) {
     super(db, [
       'title', 'description', 'text',
-      'description_image', 'images', 'categories', 'tags'
+      'description_image', 'image', 'categories', 'tags'
     ]);
   }
 
@@ -34,6 +34,23 @@ class Article extends Model {
           return article
             ? resolve(article)
             : reject(new this.error.NotFoundError('Article not found'));
+        })
+        .catch(err => reject(err))
+    })
+  }
+
+  update(id, newData) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .updateOne({
+          _id: this.ObjectID.createFromHexString(id)
+        },{
+          $set: newData
+        })
+        .then(result => {
+          return result && result.modifiedCount
+            ? resolve(id)
+            : reject(new this.error.InternalServerError('Not updated'))
         })
         .catch(err => reject(err))
     })

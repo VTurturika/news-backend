@@ -9,6 +9,7 @@ Entities:
 | ----------- | ------ | -------- |
 | [Create new article](#create-new-article) | POST | /article |
 | [Get article by id](#get-article-by-id) | GET | /article/:id |
+| [Update article by id](#update-article-by-id) | PUT | /article/:id |
 | [Delete article by id](#delete-article-by-id) | DELETE | /article/:id |
 
 ### Create new article
@@ -20,7 +21,7 @@ Entities:
     "description": "Article description", //required
     "text": "Article text", //required
     "description_image": "image url", //required
-    "images": ["url1", "url2"],
+    "image": "image_url",
     "categories": [],
     "tags": []
 }
@@ -35,7 +36,7 @@ Entities:
     "description": "Article description",
     "text": "Article text", //required
     "description_image": "image url",
-    "images": ["url1", "url2"],
+    "image": "image_url",
     "categories": [],
     "tags": []
 }
@@ -59,7 +60,7 @@ Entities:
     "description": "Article description",
     "text": "Article text", //required
     "description_image": "image url",
-    "images": ["url1", "url2"],
+    "image": "image_url",
     "categories": [],
     "tags": []
 }
@@ -78,6 +79,40 @@ Entities:
 }
 ```
 
+### Update article by id
+#### Query
+#### Request
+```javascript
+{
+    "title": "New title",
+    "description": "New description",
+    "text": "New text",
+    "description_image": "image url",
+    "image": "image_url"
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+    "_id": "id_string"
+    "title": "New title",
+    "description": "New description",
+    "text": "New text",
+    "description_image": "image url",
+    "image": "image_url"
+    "categories": [],
+    "tags": []
+}
+```
+* 400
+```javascript
+{
+  "message": "BadRequest"
+}
+```
+
 ### Delete article by id
 #### Query
 #### Request
@@ -90,7 +125,7 @@ Entities:
     "description": "Article description",
     "text": "Article text", //required
     "description_image": "image url",
-    "images": ["url1", "url2"],
+    "image": "image_url",
     "categories": [],
     "tags": []
 }
