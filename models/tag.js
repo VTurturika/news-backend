@@ -29,6 +29,58 @@ class Tag extends Model {
     });
   }
 
+  find(tagName) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .findOne({
+          tags: tagName
+        })
+        .then(article => {
+          return article
+            ? resolve(tagName)
+            : reject(new this.error.NotFoundError('Tag not found'));
+        })
+        .catch(err => reject(err))
+    })
+  }
+
+  change(oldName, newName) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .updateMany({
+          tags: oldName
+        },{
+          $addToSet: {tags: newName}
+        })
+        .then(response => {
+          return response && response.result && response.result.ok
+            ? this.del(oldName)
+            : reject(new this.error.InternalServerError('Tag not changed'))
+        })
+        .then(result => resolve(result))
+        .catch(err => reject(err))
+    });
+  }
+
+  del(tagName) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .updateMany({
+          tags: tagName
+        }, {
+          $pull: {tags: tagName}
+        })
+        .then(response => {
+          return response && response.modifiedCount
+            ? resolve({
+              oldName: tagName,
+              changedArticles: response.modifiedCount
+            })
+            : reject(new this.error.InternalServerError('Tag not deleted'))
+        })
+    })
+  }
+
 }
 
 module.exports = {

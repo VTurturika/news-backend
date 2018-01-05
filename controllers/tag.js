@@ -27,11 +27,22 @@ class TagController extends Controller {
   }
 
   change(req, res) {
-    res.send(`PUT /tag/:${req.params.tagName}`)
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'tagName'))
+      .then(tagName => instance.model.find(tagName))
+      .then(() => instance.isExistField(req, 'newName'))
+      .then(() => instance.model.change(req.params.tagName, req.body.newName))
+      .then(result => res.send(result))
+      .catch(err => res.send(err));
   }
 
   del(req, res) {
-    res.send(`DELETE /tag/:${req.params.tagName}`)
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'tagName'))
+      .then(tagName => instance.model.find(tagName))
+      .then(tagName => instance.model.del(tagName))
+      .then(result => res.send(result))
+      .catch(err => res.send(err));
   }
 }
 

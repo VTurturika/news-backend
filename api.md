@@ -121,6 +121,13 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Article not found"
+}
+```
 
 ### Delete article by id
 #### Query
@@ -158,6 +165,8 @@ Entities:
 | Action | Method | Endpoint |
 | ----------- | ------ | -------- |
 | [Get all tags](#get-all-tags) | GET | /tag |
+| [Change tag](#change-tag) | PUT | /tag/:tagName |
+| [Delete tag](#delete-tag) | DELETE | /tag/:tagName |
 
 ### Get all tags
 #### Query
@@ -167,5 +176,62 @@ Entities:
 ```javascript
 {
    "tags": ["1", "2", "3"]
+}
+```
+
+### Change tag
+#### Query
+#### Request
+```javascript
+{
+    "newName": "new name for tag"
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+    "oldName": "old name of tag",
+    "changedArticles": 123
+}
+```
+* 400
+```javascript
+{
+  "message": "BadRequest"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Tag not found"
+}
+```
+
+### Delete tag
+#### Query
+#### Request
+
+#### Response
+* 200
+```javascript
+{
+    "oldName": "old name of tag"
+    "changedArticles": 123
+}
+```
+* 400
+```javascript
+{
+  "message": "BadRequest"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Tag not found"
 }
 ```
