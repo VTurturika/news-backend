@@ -15,8 +15,8 @@ class Article extends Model {
     return new Promise((resolve, reject) => {
       this.db.collection('articles')
         .insertOne(article)
-        .then(result => {
-          return result && result.insertedId
+        .then(response => {
+          return response && response.insertedId
             ? resolve(article)
             : reject(new this.error.InternalServerError('Database error'));
         })
@@ -44,16 +44,49 @@ class Article extends Model {
       this.db.collection('articles')
         .updateOne({
           _id: this.ObjectID.createFromHexString(id)
-        },{
-          $set: newData
-        })
-        .then(result => {
-          return result && result.modifiedCount
+        },
+          Article.prepareForUpdate(newData)
+        )
+        .then(response => {
+          return response && response.result && response.result.ok
             ? resolve(id)
-            : reject(new this.error.InternalServerError('Not updated'))
+            : reject(new this.error.InternalServerError('Article not updated'))
         })
         .catch(err => reject(err))
     })
+  }
+
+  static prepareForUpdate(newData) {
+
+    let updateObject = {};
+
+    if(newData.tags) { //need update tags
+
+      if(newData.tags.add &&
+        Array.isArray(newData.tags.add) &&
+        newData.tags.add.length > 0 &&
+        newData.tags.add.every(tag => typeof tag === 'string')
+      ) {
+        updateObject.$addToSet = {
+          tags: {$each : newData.tags.add} //add tags
+        }
+      }
+
+      if(newData.tags.remove &&
+        Array.isArray(newData.tags.remove) &&
+        newData.tags.remove.length > 0 &&
+        newData.tags.remove.every(tag => typeof tag === 'string')
+      ) {
+        updateObject.$pullAll = {
+          tags: newData.tags.remove //remove tags
+        }
+      }
+
+      delete newData.tags;
+    }
+    updateObject.$set = newData;
+
+    return updateObject;
   }
 
   del(article) {
@@ -65,7 +98,7 @@ class Article extends Model {
         .then(result => {
           return result && result.deletedCount
             ? resolve(article)
-            : reject(new this.error.InternalServerError('Database error'));
+            : reject(new this.error.InternalServerError('Article not deleted'));
         })
         .catch(err => reject(err))
     })

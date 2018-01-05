@@ -88,7 +88,11 @@ Entities:
     "description": "New description",
     "text": "New text",
     "description_image": "image url",
-    "image": "image_url"
+    "image": "image_url",
+    "tags": {
+        "add": ["1", "2", "3"],
+        "remove": ["4"]
+    }
 }
 ```
 
