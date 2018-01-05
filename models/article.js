@@ -91,14 +91,20 @@ class Article extends Model {
     return {$set: newData};
   }
 
-  del(article) {
+  del(id) {
     return new Promise((resolve, reject) => {
-      this.db.collection('articles')
-        .deleteOne({
-          _id: article._id
-        })
+      let article;
+      Promise.resolve()
+        .then(() => this.get(id))
         .then(result => {
-          return result && result.deletedCount
+          article = result;
+          return this.db.collection('articles')
+            .deleteOne({
+              _id: article._id
+            })
+        })
+        .then(response => {
+          return response && response.deletedCount
             ? resolve(article)
             : reject(new this.error.InternalServerError('Article not deleted'));
         })
