@@ -92,6 +92,10 @@ Entities:
     "tags": {
         "add": ["1", "2", "3"],
         "remove": ["4"]
+    },
+    "categories": {
+        "add": ["1", "2", "3"],
+        "remove": ["4", "5"]
     }
 }
 ```

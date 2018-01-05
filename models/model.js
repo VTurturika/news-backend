@@ -34,6 +34,19 @@ class Model {
     });
   }
 
+  arrayToObject(array) {
+    return array.reduce((result, item) => {
+      result[item] = true;
+      return result;
+    }, {})
+  };
+
+  isArrayOfStrings(array) {
+    return Array.isArray(array) &&
+    array.length > 0 &&
+    array.every(item => typeof item === 'string');
+  }
+
 }
 
 module.exports = {

@@ -47,7 +47,7 @@ class Article extends Model {
           .updateOne({
               _id: this.ObjectID.createFromHexString(id)
             },
-            Article.prepareForUpdate(newData, article)
+            this.prepareForUpdate(newData, article)
           )
         )
         .then(response => {
@@ -60,39 +60,35 @@ class Article extends Model {
     })
   }
 
-  static prepareForUpdate(newData, article) {
+  prepareForUpdate(newData, article) {
 
     if(newData.tags) { //need update tags
+      let tags = this.arrayToObject(article.tags);
 
-      let tags = Article.arrayToObject(article.tags);
-
-      if(newData.tags.add &&
-        Array.isArray(newData.tags.add) &&
-        newData.tags.add.length > 0 &&
-        newData.tags.add.every(tag => typeof tag === 'string')
-      ) {
-        newData.tags.add.forEach(tag => tags[tag] = true) //add tags
+      if(newData.tags.add && this.isArrayOfStrings(newData.tags.add)) {
+        newData.tags.add.forEach(tag => tags[tag] = true);
       }
 
-      if(newData.tags.remove &&
-        Array.isArray(newData.tags.remove) &&
-        newData.tags.remove.length > 0 &&
-        newData.tags.remove.every(tag => typeof tag === 'string')
-      ) {
-        newData.tags.remove.forEach(tag => delete tags[tag]) //remove tags
+      if(newData.tags.remove && this.isArrayOfStrings(newData.tags.remove)) {
+        newData.tags.remove.forEach(tag => delete tags[tag])
+      }
+      newData.tags = Object.keys(tags);
+    }
+
+    if(newData.categories) { //need update categories
+      let categories = this.arrayToObject(article.categories);
+
+      if(newData.categories.add && this.isArrayOfStrings(newData.categories.add)) {
+        newData.categories.add.forEach(category => categories[category] = true)
       }
 
-      newData.tags = Object.keys(tags); //set merged tags
+      if(newData.categories.remove && this.isArrayOfStrings(newData.categories.remove)) {
+        newData.categories.remove.forEach(category => delete categories[category])
+      }
+      newData.categories = Object.keys(categories);
     }
 
     return {$set: newData};
-  }
-
-  static arrayToObject(array) {
-    return array.reduce((result, item) => {
-      result[item] = true;
-      return result;
-    }, {})
   }
 
   del(article) {
