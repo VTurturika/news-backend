@@ -16,8 +16,8 @@ class Category extends Model {
         pipeline.push({
           $match: {
             $or: [
-              {_id: parent},
-              {ancestors: parent}
+              {_id: this.createId(parent)},
+              {ancestors: this.createId(parent)}
             ]
           }
         })
@@ -42,37 +42,62 @@ class Category extends Model {
 
     node.ancestors.forEach(ancestor => {
       root.find(item => {
-        if(item.name === ancestor) {
+        if(ancestor.equals(item._id)) {
           root = item.children;
           return true;
         }
       })
     });
 
-    this.replaceIdToName(node);
     node.children = [];
     root.push(node);
   }
 
-  replaceIdToName(category) {
-    category.name = category._id;
-    delete category._id;
-    return category
-  }
-
-  get(name) {
+  get(id) {
     return new Promise((resolve, reject) => {
       this.db.collection('categories')
         .findOne({
-          _id: name
+          _id: this.createId(id)
         })
         .then(category => {
           return category
-            ? resolve(this.replaceIdToName(category))
+            ? resolve(category)
             : reject(new this.error.NotFoundError('Category not found'))
         })
         .catch(err => reject(err))
     })
+  }
+
+  create(category) {
+    return new Promise((resolve, reject) => {
+      if(category.parent === null) { //add to root
+        category.ancestors = [];
+        this.db.collection('categories').insertOne(category)
+          .then(response => {
+            return response && response.insertedId
+              ? resolve(category)
+              : reject(new this.error.InternalServerError('Category not created'))
+          })
+          .catch(err => reject(err))
+      }
+      else {
+        Promise.resolve()
+          .then(() => this.validateId(category.parent))
+          .then(() => this.get(category.parent)) //find parent
+          .then(parent => {
+            category.parent = this.createId(category.parent);
+            category.ancestors = parent.ancestors;
+            category.ancestors.push(category.parent);
+            return this.db.collection('categories').insertOne(category)
+          })
+          .then(response => {
+            return response && response.insertedId
+              ? resolve(category)
+              : reject(new this.error.InternalServerError('Category not created'))
+          })
+          .catch(err => reject(err))
+      }
+    });
   }
 }
 

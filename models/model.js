@@ -34,6 +34,10 @@ class Model {
     });
   }
 
+  createId(idAsHex) {
+    return this.ObjectID.createFromHexString(idAsHex);
+  }
+
   arrayToObject(array) {
     return array.reduce((result, item) => {
       result[item] = true;

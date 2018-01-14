@@ -241,13 +241,48 @@ Entities:
 
 | Action | Method | Endpoint |
 | ----------- | ------ | -------- |
+| [Add new category](#add-new-category) | POST | /category |
 | [Get categories](#get-categories) | GET | /category |
-| [Get category by name](#get-category-by-name) | GET | /category/:name |
+| [Get category](#get-category) | GET | /category/:id |
+| [Get category with subtree](#get-category-with-subtree) | GET | /category/subtree/:id |
+
+### Add category
+#### Query
+#### Request
+```javascript
+{
+    "name": "Category name", //required
+    "parent": "Parent id" //required
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+
+    "_id": "id",
+    "name": "Category name",
+    "parent": "Parent id",
+    "ancestors": [
+        "Ancestor 1 id",
+        "Ancestor 2 id",
+        // ...
+        "Parent id"
+    ]
+}
+```
+* 400
+```javascript
+{
+  "message": "BadRequest"
+}
+```
 
 ### Get categories
 #### Query
 ```javascript
-    parent=name_of_parent //optional
+    parent=id_of_parent //optional
 ```
 #### Request
 
@@ -256,35 +291,39 @@ Entities:
 ```javascript
 [
     {
+        "_id": "id",
         "ancestors": [],
         "parent": null,
         "level": 0,
         "name": "node1",
         "children": [
             {
+                "_id": "id",
                 "ancestors": [
-                    "node1"
+                    "node1 id"
                 ],
-                "parent": "node1",
+                "parent": "node1 id",
                 "level": 1,
                 "name": "node2",
                 "children": [
                     {
+                        "_id": "id",
                         "ancestors": [
-                            "node1",
-                            "node2"
+                            "node1 id",
+                            "node2 id"
                         ],
-                        "parent": "node2",
+                        "parent": "node2 id",
                         "level": 2,
                         "name": "node3",
                         "children": []
                     },
                     {
+                        "_id": "id",
                         "ancestors": [
-                            "node1",
-                            "node2"
+                            "node1 id",
+                            "node2 id"
                         ],
-                        "parent": "node2",
+                        "parent": "node2 id",
                         "level": 2,
                         "name": "node4",
                         "children": []
@@ -295,8 +334,14 @@ Entities:
     }
 ]
 ```
+* 400
+```javascript
+{
+  "message": "BadRequest"
+}
+```
 
-### Get category by name
+### Get category
 #### Query
 #### Request
 
@@ -304,13 +349,74 @@ Entities:
 * 200
 ```javascript
 {
+    "_id": "id",
     "ancestors": [
-        "Node1",
-        "Node2"
+        "node1 id",
+        "node2 id"
     ],
-    "parent": "Node2",
+    "parent": "node2 id",
     "name": "Node3"
 }
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Category not found"
+}
+```
+
+### Get category with subtree
+#### Query
+#### Request
+
+#### Response
+* 200
+```javascript
+[
+    {
+        "_id": "id",
+        "ancestors": [],
+        "parent": null,
+        "level": 0,
+        "name": "node1",
+        "children": [
+            {
+                "_id": "id",
+                "ancestors": [
+                    "node1 id"
+                ],
+                "parent": "node1 id",
+                "level": 1,
+                "name": "node2",
+                "children": [
+                    {
+                        "_id": "id",
+                        "ancestors": [
+                            "node1 id",
+                            "node2 id"
+                        ],
+                        "parent": "node2 id",
+                        "level": 2,
+                        "name": "node3",
+                        "children": []
+                    },
+                    {
+                        "_id": "id",
+                        "ancestors": [
+                            "node1 id",
+                            "node2 id"
+                        ],
+                        "parent": "node2 id",
+                        "level": 2,
+                        "name": "node4",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]
 ```
 * 404
 ```javascript
