@@ -49,10 +49,30 @@ class Category extends Model {
       })
     });
 
-    node.name = node._id;
-    delete node._id;
+    this.replaceIdToName(node);
     node.children = [];
     root.push(node);
+  }
+
+  replaceIdToName(category) {
+    category.name = category._id;
+    delete category._id;
+    return category
+  }
+
+  get(name) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('categories')
+        .findOne({
+          _id: name
+        })
+        .then(category => {
+          return category
+            ? resolve(this.replaceIdToName(category))
+            : reject(new this.error.NotFoundError('Category not found'))
+        })
+        .catch(err => reject(err))
+    })
   }
 }
 

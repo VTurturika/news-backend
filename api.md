@@ -242,6 +242,7 @@ Entities:
 | Action | Method | Endpoint |
 | ----------- | ------ | -------- |
 | [Get categories](#get-categories) | GET | /category |
+| [Get category by name](#get-category-by-name) | GET | /category/:name |
 
 ### Get categories
 #### Query
@@ -293,4 +294,28 @@ Entities:
         ]
     }
 ]
+```
+
+### Get category by name
+#### Query
+#### Request
+
+#### Response
+* 200
+```javascript
+{
+    "ancestors": [
+        "Node1",
+        "Node2"
+    ],
+    "parent": "Node2",
+    "name": "Node3"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Category not found"
+}
 ```

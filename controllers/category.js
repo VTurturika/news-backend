@@ -10,6 +10,7 @@ class CategoryController extends Controller {
 
     if(!instance) {
       server.get('/category', this.getAll);
+      server.get('/category/:name', this.get);
       this.model = model;
 
       instance = this;
@@ -25,6 +26,13 @@ class CategoryController extends Controller {
       .catch(err => res.send(err));
   }
 
+  get(req, res) {
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'name'))
+      .then(name => instance.model.get(name))
+      .then(category => res.send(category))
+      .catch(err => res.send(err));
+  }
 }
 
 module.exports = {
