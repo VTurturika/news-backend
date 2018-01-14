@@ -373,50 +373,48 @@ Entities:
 #### Response
 * 200
 ```javascript
-[
-    {
-        "_id": "id",
-        "ancestors": [],
-        "parent": null,
-        "level": 0,
-        "name": "node1",
-        "children": [
-            {
-                "_id": "id",
-                "ancestors": [
-                    "node1 id"
-                ],
-                "parent": "node1 id",
-                "level": 1,
-                "name": "node2",
-                "children": [
-                    {
-                        "_id": "id",
-                        "ancestors": [
-                            "node1 id",
-                            "node2 id"
-                        ],
-                        "parent": "node2 id",
-                        "level": 2,
-                        "name": "node3",
-                        "children": []
-                    },
-                    {
-                        "_id": "id",
-                        "ancestors": [
-                            "node1 id",
-                            "node2 id"
-                        ],
-                        "parent": "node2 id",
-                        "level": 2,
-                        "name": "node4",
-                        "children": []
-                    }
-                ]
-            }
-        ]
-    }
-]
+{
+    "_id": "id",
+    "ancestors": [],
+    "parent": null,
+    "level": 0,
+    "name": "node1",
+    "children": [
+        {
+            "_id": "id",
+            "ancestors": [
+                "node1 id"
+            ],
+            "parent": "node1 id",
+            "level": 1,
+            "name": "node2",
+            "children": [
+                {
+                    "_id": "id",
+                    "ancestors": [
+                        "node1 id",
+                        "node2 id"
+                    ],
+                    "parent": "node2 id",
+                    "level": 2,
+                    "name": "node3",
+                    "children": []
+                },
+                {
+                    "_id": "id",
+                    "ancestors": [
+                        "node1 id",
+                        "node2 id"
+                    ],
+                    "parent": "node2 id",
+                    "level": 2,
+                    "name": "node4",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}
 ```
 * 404
 ```javascript

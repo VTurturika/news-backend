@@ -31,7 +31,7 @@ class Category extends Model {
         .then(categories => {
           let tree = [];
           categories.forEach(category => this.addToTree(tree, category));
-          resolve(tree);
+          resolve(parent ? tree[0]: tree);
         })
         .catch(err => reject(err))
     })
