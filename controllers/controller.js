@@ -19,6 +19,14 @@ class Controller {
         : reject(new error.BadRequestError(`param :${param} is required`))
     });
   }
+
+  isExistQueryParam(req, param) {
+    return new Promise((resolve, reject) => {
+      return req.query && req.query[param] !== undefined
+        ? resolve(req.query[param])
+        : resolve(null)
+    })
+  }
 }
 
 module.exports = {
