@@ -4,6 +4,7 @@ Entities:
 - [Article](#article)
 - [Tag](#tag)
 - [Category](#category)
+- [User](#user)
 
 ## Article
 
@@ -483,3 +484,14 @@ Entities:
     "message": "Category not found"
 }
 ```
+
+## Article
+
+| Action | Method | Endpoint |
+| ----------- | ------ | -------- |
+| [Signup](#signup) | POST | /user/signup |
+| [Login](#login) | POST | /user/login |
+| [Logout](#logout) | POST | /user/logout |
+| [Update user](#update-user) | PUT | /user/:id |
+| [Delete user](#delete-user) | DELETE | /user/:id |
+
