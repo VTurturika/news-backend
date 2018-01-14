@@ -99,6 +99,25 @@ class Category extends Model {
       }
     });
   }
+
+  update(id, newName) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('categories')
+        .updateOne({
+          _id: this.createId(id)
+        }, {
+          $set: {name: newName}
+        })
+        .then(response => {
+          return response && response.result && response.result.ok
+            ? this.get(id)
+            : reject(new this.error.InternalServerError('Category not updated'))
+        })
+        .then(category => resolve(category)) //return updated category
+        .catch(err => reject(err));
+    });
+  }
+
 }
 
 module.exports = {

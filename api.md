@@ -245,6 +245,7 @@ Entities:
 | [Get categories](#get-categories) | GET | /category |
 | [Get category](#get-category) | GET | /category/:id |
 | [Get category with subtree](#get-category-with-subtree) | GET | /category/subtree/:id |
+| [Update category name](#update-category-name) | PUT | /category/:id |
 
 ### Add category
 #### Query
@@ -414,6 +415,42 @@ Entities:
             ]
         }
     ]
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Category not found"
+}
+```
+
+### Update category name
+#### Query
+#### Request
+```javascript
+{
+  "name": "New category name"
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+    "_id": "id",
+    "ancestors": [
+        "node1 id",
+        "node2 id"
+    ],
+    "parent": "node2 id",
+    "name": "New name"
+}
+```
+* 400
+```javascript
+{
+  "message": "BadRequest"
 }
 ```
 * 404
