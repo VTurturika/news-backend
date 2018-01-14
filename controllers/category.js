@@ -14,6 +14,7 @@ class CategoryController extends Controller {
       server.get('/category/subtree/:id', this.getWithSubtree);
       server.get('/category', this.getAll);
       server.put('/category/:id', this.update);
+      server.del('/category/:id', this.del);
       this.model = model;
 
       instance = this;
@@ -63,6 +64,16 @@ class CategoryController extends Controller {
       .then(id => instance.model.get(id))
       .then(() => instance.isExistField(req, 'name'))
       .then(() => instance.model.update(req.params.id, req.body.name))
+      .then(category => res.send(category))
+      .catch(err => res.send(err))
+  }
+
+  del(req, res) {
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'id'))
+      .then(id => instance.model.validateId(id))
+      .then(id => instance.model.get(id))
+      .then(category => instance.model.del(category))
       .then(category => res.send(category))
       .catch(err => res.send(err))
   }

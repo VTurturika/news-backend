@@ -246,6 +246,7 @@ Entities:
 | [Get category](#get-category) | GET | /category/:id |
 | [Get category with subtree](#get-category-with-subtree) | GET | /category/subtree/:id |
 | [Update category name](#update-category-name) | PUT | /category/:id |
+| [Delete category](#delete-category) | DELETE | /category/:id |
 
 ### Add category
 #### Query
@@ -282,9 +283,6 @@ Entities:
 
 ### Get categories
 #### Query
-```javascript
-    parent=id_of_parent //optional
-```
 #### Request
 
 #### Response
@@ -451,6 +449,31 @@ Entities:
 ```javascript
 {
   "message": "BadRequest"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "Category not found"
+}
+```
+
+### Delete category
+#### Query
+#### Request
+
+#### Response
+* 200
+```javascript
+{
+    "_id": "id",
+    "ancestors": [
+        "node1 id",
+        "node2 id"
+    ],
+    "parent": "node2 id",
+    "name": "Node3"
 }
 ```
 * 404

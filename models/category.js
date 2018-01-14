@@ -118,6 +118,47 @@ class Category extends Model {
     });
   }
 
+  del(category) {
+    return new Promise((resolve, reject) => {
+      Promise.resolve()
+        .then(() => this.db.collection('categories')
+          .updateMany({ //update parent reference for direct children
+            parent: category._id
+          }, {
+            $set: {parent: category.parent}
+          })
+        )
+        .then(response => {
+          return response && response.result && response.result.ok
+            ? this.db.collection('categories')
+              .updateMany({ //remove id from all ancestors arrays
+                ancestors: category._id
+              }, {
+                $pull: {ancestors: category._id}
+              })
+            : reject(new this.error.InternalServerError(
+              "Can't update parent reference for direct children"
+            ))
+        })
+        .then(response => {
+          return response && response.result && response.result.ok
+            ? this.db.collection('categories')
+              .deleteOne({ //finally delete category
+                _id: category._id
+              })
+            : reject(new this.error.InternalServerError(
+              "Can't delete occurrences of id Ancestors arrays"
+            ))
+        })
+        .then(response => {
+          return response && response.deletedCount
+            ? resolve(category)
+            : reject(new this.error.InternalServerError("Can't delete category"))
+        })
+        .catch(err => reject(err));
+    });
+  }
+
 }
 
 module.exports = {
