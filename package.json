@@ -11,6 +11,8 @@
   "author": "Victor Turturika",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "jsonwebtoken": "^8.1.0",
     "mongodb": "^3.0.1",
     "restify": "^6.3.4",
     "restify-errors": "^5.0.0"
