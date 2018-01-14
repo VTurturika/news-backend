@@ -3,6 +3,7 @@
 Entities:
 - [Article](#article)
 - [Tag](#tag)
+- [Category](#category)
 
 ## Article
 
@@ -234,4 +235,62 @@ Entities:
     "code": "NotFound",
     "message": "Tag not found"
 }
+```
+
+## Category
+
+| Action | Method | Endpoint |
+| ----------- | ------ | -------- |
+| [Get categories](#get-categories) | GET | /category |
+
+### Get categories
+#### Query
+```javascript
+    parent=name_of_parent //optional
+```
+#### Request
+
+#### Response
+* 200
+```javascript
+[
+    {
+        "ancestors": [],
+        "parent": null,
+        "level": 0,
+        "name": "node1",
+        "children": [
+            {
+                "ancestors": [
+                    "node1"
+                ],
+                "parent": "node1",
+                "level": 1,
+                "name": "node2",
+                "children": [
+                    {
+                        "ancestors": [
+                            "node1",
+                            "node2"
+                        ],
+                        "parent": "node2",
+                        "level": 2,
+                        "name": "node3",
+                        "children": []
+                    },
+                    {
+                        "ancestors": [
+                            "node1",
+                            "node2"
+                        ],
+                        "parent": "node2",
+                        "level": 2,
+                        "name": "node4",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]
 ```

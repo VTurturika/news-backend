@@ -18,7 +18,11 @@ class CategoryController extends Controller {
   }
 
   getAll(req, res) {
-    res.send('GET /category');
+    Promise.resolve()
+      .then(() => instance.isExistQueryParam(req, 'parent'))
+      .then(parent => instance.model.getAll(parent))
+      .then(categories => res.send(categories))
+      .catch(err => res.send(err));
   }
 
 }
