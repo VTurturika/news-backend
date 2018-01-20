@@ -612,17 +612,13 @@ Authorization: Bearer <jwt token>
 ### Logout
 #### Auth
 Authorization: Bearer <jwt token>
-#### Request
-```javascript
-{
-	"username": "username"
-}
-```
 
 #### Response
 * 200
 ```javascript
-{}
+{
+    "code": "OK"
+}
 ```
 * 401
 ```javascript

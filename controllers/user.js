@@ -11,6 +11,8 @@ class UserController extends Controller {
     if(!instance) {
       server.post('/user/signup', this.signUp);
       server.post('/user/login', this.login);
+      server.post('/user/logout/:id', this.logout);
+      server.get('/user', this.getAll);
       server.put('/user/:id', this.update);
       server.del('/user/:id', this.del);
       this.model = model;
@@ -43,6 +45,16 @@ class UserController extends Controller {
       .catch(err => res.send(err));
   }
 
+  logout(req, res) {
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'id'))
+      .then(id => instance.model.validateId(id))
+      .then(id => instance.model.get(id))
+      .then(user => instance.model.logout(user))
+      .then(() => res.send({code: "OK"}))
+      .catch(err => res.send(err));
+  }
+
   update(req, res) {
     Promise.resolve()
       .then(() => instance.isExistParam(req, 'id'))
@@ -62,6 +74,10 @@ class UserController extends Controller {
       .then(user => instance.model.del(user))
       .then(user => res.send(user))
       .catch(err => res.send(err));
+  }
+
+  getAll(req, res) {
+
   }
 }
 

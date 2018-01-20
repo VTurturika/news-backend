@@ -81,6 +81,25 @@ class User extends Model {
     });
   }
 
+  logout(user) {
+    return new Promise((resolve, reject) => {
+      user.token = user.refreshToken = '';
+      user.finishedAt = new Date().toISOString();
+      this.db.collection('users')
+        .updateOne({
+          _id: user._id
+        },{
+          $set: user
+        })
+        .then(response => {
+          return response && response.result && response.result.ok
+            ? resolve()
+            : reject(new this.error.InternalServerError('User not logged out'))
+        })
+        .catch(err => reject(err))
+    })
+  }
+
   startSession(id) {
     return new Promise((resolve, reject) => {
       let tokens = this.jwt.generateTokens({_id: id});
