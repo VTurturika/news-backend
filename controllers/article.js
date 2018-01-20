@@ -43,8 +43,13 @@ class ArticleController extends Controller {
   }
 
   getAll(req, res) {
+    let query = {};
     Promise.resolve()
-      .then(() => instance.model.getArticles())
+      .then(() => instance.getQueryParam(req, 'mode', query))
+      .then(() => instance.getQueryParam(req, 'user', query))
+      .then(() => instance.getQueryParam(req, 'tags', query))
+      .then(() => instance.getQueryParam(req, 'categories', query))
+      .then(() => instance.model.getAll(query))
       .then(articles => res.json(articles))
       .catch(err => res.json(err));
   }

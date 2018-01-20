@@ -20,11 +20,12 @@ class Controller {
     });
   }
 
-  isExistQueryParam(req, param) {
-    return new Promise((resolve, reject) => {
-      return req.query && req.query[param] !== undefined
-        ? resolve(req.query[param])
-        : resolve(null)
+  getQueryParam(req, param, out) {
+    return new Promise(resolve => {
+      if(req.query && req.query[param] !== undefined) {
+        out[param] = req.query[param]
+      }
+      resolve();
     })
   }
 }

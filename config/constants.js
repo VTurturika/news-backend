@@ -22,9 +22,9 @@ module.exports = {
       '/category': 'GET',
       '/tag': 'GET',
       '/user/signup': 'POST',
+      '/user/refresh/:id': 'POST',
       '/user/login': 'POST',
-      '/user': 'GET',
-      '/user/refresh/:id': 'POST'
+      '/user': 'GET'
     }
   }
 };

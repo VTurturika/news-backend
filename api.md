@@ -12,6 +12,7 @@ Entities:
 | ----------- | ------ | -------- |
 | [Create new article](#create-new-article) | POST | /article |
 | [Get article by id](#get-article-by-id) | GET | /article/:id |
+| [Get all articles](#get-all-articles) | GET | /article |
 | [Update article by id](#update-article-by-id) | PUT | /article/:id |
 | [Delete article by id](#delete-article-by-id) | DELETE | /article/:id |
 
@@ -35,7 +36,8 @@ Authorization: Bearer <jwt token>
 * 200
 ```javascript
 {
-    "_id": "id_string"
+    "_id": "id_string",
+    "user": "user id",
     "title": "Article title",
     "description": "Article description",
     "text": "Article text", //required
@@ -64,7 +66,8 @@ Authorization: Bearer <jwt token>
 * 200
 ```javascript
 {
-    "_id": "id_string"
+    "_id": "id_string",
+    "user": "user id",
     "title": "Article title",
     "description": "Article description",
     "text": "Article text", //required
@@ -86,6 +89,33 @@ Authorization: Bearer <jwt token>
     "code": "NotFound",
     "message": "Article not found"
 }
+```
+
+### Get all articles
+#### Query
+```javascript
+    mode = and | or //default "and"
+    user = 123
+    tags = tag1,tag2,tag3
+    categories = category1,category2
+```
+
+#### Response
+* 200
+```javascript
+[
+    {
+        "_id": "id_string",
+        "user": "user id",
+        "title": "Article title",
+        "description": "Article description",
+        "text": "Article text",
+        "description_image": "image url",
+        "image": "image_url",
+        "categories": [],
+        "tags": []
+    }
+]
 ```
 
 ### Update article by id
@@ -114,7 +144,8 @@ Authorization: Bearer <jwt token>
 * 200
 ```javascript
 {
-    "_id": "id_string"
+    "_id": "id_string",
+    "user": "user id",
     "title": "New title",
     "description": "New description",
     "text": "New text",
@@ -152,7 +183,8 @@ Authorization: Bearer <jwt token>
 * 200
 ```javascript
 {
-    "_id": "id_string"
+    "_id": "id_string",
+    "user": "user id",
     "title": "Article title",
     "description": "Article description",
     "text": "Article text", //required

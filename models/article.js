@@ -25,6 +25,55 @@ class Article extends Model {
     })
   }
 
+  getAll(query) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('articles')
+        .find(this.prepareQuery(query))
+        .toArray()
+        .then(articles => resolve(articles))
+        .catch(err => reject(err))
+    });
+  }
+
+  prepareQuery(query) {
+
+    if(!Object.keys(query).length) return {};
+    let filters = [];
+    let mode = query.mode === 'or' ? query.mode : 'and';
+
+    if(query.user) {
+      filters.push({
+        user: query.user
+      })
+    }
+    if(query.categories) {
+      let categories = {};
+      categories[`$${mode}`] = query.categories
+        .trim()
+        .split(',')
+        .filter(x => !!x)
+        .map(category => {
+          return {categories: category}
+        });
+      filters.push(categories);
+    }
+    if(query.tags) {
+      let tags = {};
+      tags[`$${mode}`] = query.tags
+        .trim()
+        .split(',')
+        .filter(x => !!x)
+        .map(tag => {
+          return {tags: tag}
+        });
+      filters.push(tags);
+    }
+
+    let result = {};
+    result['$' + mode] = filters;
+    return result
+  }
+
   get(id) {
     let article = null;
     return new Promise((resolve, reject) => {
@@ -148,16 +197,6 @@ class Article extends Model {
         })
         .catch(err => reject(err))
     })
-  }
-
-  getArticles() {
-    return new Promise((resolve, reject) => {
-      this.db.collection('articles')
-        .find()
-        .toArray()
-        .then(data => resolve(data))
-        .catch(err => reject(err))
-    });
   }
 }
 
