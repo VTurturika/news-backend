@@ -1,6 +1,6 @@
 'use strict';
 
-const entities = ['article', 'tag', 'category', 'user'];
+const entities = ['jwt', 'article', 'tag', 'category', 'user'];
 const modelsDir = '../models/';
 const controllersDir = '../controllers/';
 

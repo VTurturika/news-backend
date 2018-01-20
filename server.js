@@ -3,13 +3,11 @@
 const restify = require('restify');
 const server = restify.createServer();
 const constants = require('./config/constants');
-const jwt = require('./services/jwt');
 const init = require('./config/init');
 
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.fullResponse());
-server.use(jwt.handler);
 
 Promise.resolve()
   .then(() => init.database(constants))
