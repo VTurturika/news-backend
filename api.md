@@ -16,7 +16,8 @@ Entities:
 | [Delete article by id](#delete-article-by-id) | DELETE | /article/:id |
 
 ### Create new article
-#### Query
+#### Auth
+Authorization: Bearer <jwt token>
 #### Request
 ```javascript
 {
@@ -50,10 +51,15 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 
 ### Get article by id
-#### Query
-#### Request
 #### Response
 * 200
 ```javascript
@@ -83,7 +89,8 @@ Entities:
 ```
 
 ### Update article by id
-#### Query
+#### Auth
+Authorization: Bearer <jwt token>
 #### Request
 ```javascript
 {
@@ -123,6 +130,13 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 * 404
 ```javascript
 {
@@ -132,8 +146,8 @@ Entities:
 ```
 
 ### Delete article by id
-#### Query
-#### Request
+#### Auth
+Authorization: Bearer <jwt token>
 #### Response
 * 200
 ```javascript
@@ -154,6 +168,13 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 * 404
 ```javascript
 {
@@ -171,8 +192,6 @@ Entities:
 | [Delete tag](#delete-tag) | DELETE | /tag/:tagName |
 
 ### Get all tags
-#### Query
-#### Request
 #### Response
 * 200
 ```javascript
@@ -182,7 +201,8 @@ Entities:
 ```
 
 ### Change tag
-#### Query
+#### Auth
+Authorization: Bearer <jwt token>
 #### Request
 ```javascript
 {
@@ -204,6 +224,13 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 * 404
 ```javascript
 {
@@ -213,9 +240,8 @@ Entities:
 ```
 
 ### Delete tag
-#### Query
-#### Request
-
+#### Auth
+Authorization: Bearer <jwt token>
 #### Response
 * 200
 ```javascript
@@ -228,6 +254,13 @@ Entities:
 ```javascript
 {
   "message": "BadRequest"
+}
+```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
 }
 ```
 * 404
@@ -250,7 +283,8 @@ Entities:
 | [Delete category](#delete-category) | DELETE | /category/:id |
 
 ### Add category
-#### Query
+#### Auth
+Authorization: Bearer <jwt token>
 #### Request
 ```javascript
 {
@@ -281,10 +315,15 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 
 ### Get categories
-#### Query
-#### Request
 
 #### Response
 * 200
@@ -342,8 +381,6 @@ Entities:
 ```
 
 ### Get category
-#### Query
-#### Request
 
 #### Response
 * 200
@@ -367,8 +404,6 @@ Entities:
 ```
 
 ### Get category with subtree
-#### Query
-#### Request
 
 #### Response
 * 200
@@ -425,7 +460,8 @@ Entities:
 ```
 
 ### Update category name
-#### Query
+#### Auth
+Authorization: Bearer <jwt token>
 #### Request
 ```javascript
 {
@@ -452,6 +488,13 @@ Entities:
   "message": "BadRequest"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 * 404
 ```javascript
 {
@@ -461,9 +504,8 @@ Entities:
 ```
 
 ### Delete category
-#### Query
-#### Request
-
+#### Auth
+Authorization: Bearer <jwt token>
 #### Response
 * 200
 ```javascript
@@ -477,6 +519,13 @@ Entities:
     "name": "Node3"
 }
 ```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
 * 404
 ```javascript
 {
@@ -485,12 +534,194 @@ Entities:
 }
 ```
 
-## Article
+## User
 
 | Action | Method | Endpoint |
 | ----------- | ------ | -------- |
 | [Signup](#signup) | POST | /user/signup |
 | [Login](#login) | POST | /user/login |
+| [Logout](#logout) | POST | /user/logout |
+| [Get all users](#get-all-users) | GET | /user |
 | [Update user](#update-user) | PUT | /user/:id |
 | [Delete user](#delete-user) | DELETE | /user/:id |
 
+### Signup
+#### Request
+```javascript
+{
+	"username": "username",
+	"password": "12345",
+	"firstname": "first name",
+	"lastname": "last name"
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+    "_id": "user id",
+    "username": "username",
+    "firstname": "first name",
+    "lastname": "last name",
+    "finishedAt": "2018-01-20T14:09:40.197Z",
+    "refreshToken": "jwt refresh token",
+    "startedAt": "2018-01-20T13:09:40.197Z",
+    "token": "jwt token"
+}
+```
+* 400
+```javascript
+{
+    "code": "BadRequest",
+    "message": "User already exist"
+}
+```
+
+### Login
+#### Request
+```javascript
+{
+	"username": "username",
+	"password": "12345"
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+    "_id": "user id",
+    "username": "username",
+    "firstname": "first name",
+    "lastname": "last name",
+    "finishedAt": "2018-01-20T14:09:40.197Z",
+    "refreshToken": "jwt refresh token",
+    "startedAt": "2018-01-20T13:09:40.197Z",
+    "token": "jwt token"
+}
+```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Wrong username or password"
+}
+```
+
+### Logout
+#### Auth
+Authorization: Bearer <jwt token>
+#### Request
+```javascript
+{
+	"username": "username"
+}
+```
+
+#### Response
+* 200
+```javascript
+{}
+```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "User not found"
+}
+```
+
+### Get all users
+
+#### Response
+* 200
+```javascript
+[
+    {
+        "_id": "user id",
+        "username": "username"
+    }
+]
+```
+
+### Update user
+#### Auth
+Authorization: Bearer <jwt token>
+#### Request
+```javascript
+{
+	"firstname": "dedlewd",
+	"lastname": "ddwedewde",
+	"password": "new password"
+}
+```
+
+#### Response
+* 200
+```javasript
+{
+    "_id": "user id",
+    "username": "username",
+    "firstname": "first name",
+    "lastname": "last name",
+    "finishedAt": "2018-01-20T14:09:40.197Z",
+    "refreshToken": "jwt refresh token",
+    "startedAt": "2018-01-20T13:09:40.197Z",
+    "token": "jwt token"
+}
+```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "User not found"
+}
+```
+
+### Delete user
+#### Auth
+Authorization: Bearer <jwt token>
+
+#### Response
+* 200
+```javasript
+{
+    "_id": "user id",
+    "username": "username",
+    "firstname": "first name",
+    "lastname": "last name",
+    "finishedAt": "2018-01-20T14:09:40.197Z",
+    "refreshToken": "jwt refresh token",
+    "startedAt": "2018-01-20T13:09:40.197Z",
+    "token": "jwt token"
+}
+```
+* 401
+```javascript
+{
+    "code": "Unauthorized",
+    "message": "Access forbidden"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "User not found"
+}
+```

@@ -103,21 +103,25 @@ class User extends Model {
   update(id, user) {
     return new Promise((resolve, reject) => {
       delete user.username;
-      return Object.keys(user).length === 0
-        ? reject(new this.error.BadDigestError('Invalid request body'))
-        : this.db.collection('users')
+      Promise.resolve()
+        .then(() => {
+          return Object.keys(user).length === 0
+            ? reject(new this.error.BadDigestError('Invalid request body'))
+            : this.password.hash(user)
+        })
+        .then(user => this.db.collection('users')
           .updateOne({
             _id: this.createId(id)
           }, {
             $set: user
-          })
-          .then(response => {
-            return response && response.result && response.result.ok
-              ? this.get(id)
-              : reject(new this.error.InternalServerError('User not updated'))
-          })
-          .then(user => resolve(user))
-          .catch(err => reject(err));
+          }))
+        .then(response => {
+          return response && response.result && response.result.ok
+            ? this.get(id)
+            : reject(new this.error.InternalServerError('User not updated'))
+        })
+        .then(user => resolve(user))
+        .catch(err => reject(err));
     })
   }
 

@@ -7,12 +7,15 @@ class PasswordHasher {
 
   hash(user) {
     return new Promise((resolve, reject) => {
-      bcypt.hash(user.password, 10)
-        .then(hash => {
-          user.password = hash;
-          resolve(user);
-        })
-        .catch(err => reject(err));
+      if(user.password) {
+        bcypt.hash(user.password, 10)
+          .then(hash => {
+            user.password = hash;
+            resolve(user);
+          })
+          .catch(err => reject(err));
+      }
+      else resolve(user);
     });
   }
 
