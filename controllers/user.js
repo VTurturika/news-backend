@@ -11,6 +11,7 @@ class UserController extends Controller {
     if(!instance) {
       server.post('/user/signup', this.signUp);
       server.post('/user/login', this.login);
+      server.post('/user/refresh/:id', this.refreshToken);
       server.post('/user/logout/:id', this.logout);
       server.get('/user', this.getAll);
       server.put('/user/:id', this.update);
@@ -41,6 +42,18 @@ class UserController extends Controller {
       .then(() => instance.isExistField(req, 'password'))
       .then(() => instance.model.filterAllowedFields(req.body))
       .then(() => instance.model.login(req.body))
+      .then(user => res.send(user))
+      .catch(err => res.send(err));
+  }
+
+  refreshToken(req, res) {
+    Promise.resolve()
+      .then(() => instance.isExistParam(req, 'id'))
+      .then(id => instance.model.validateId(id))
+      .then(() => instance.isExistField(req, 'token'))
+      .then(() => instance.isExistField(req, 'refreshToken'))
+      .then(() => instance.model.get(req.params.id))
+      .then(user => instance.model.refreshToken(user, req.body))
       .then(user => res.send(user))
       .catch(err => res.send(err));
   }

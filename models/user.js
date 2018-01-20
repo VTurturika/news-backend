@@ -81,6 +81,21 @@ class User extends Model {
     });
   }
 
+  refreshToken(user, request) {
+    return new Promise((resolve, reject) => {
+      Promise.resolve()
+        .then(() => this.jwt.verifyRefreshToken(request.refreshToken, user.token))
+        .then(() => {
+          let id = user._id.toHexString();
+          return user.token === request.token && user.refreshToken === request.refreshToken
+            ? this.startSession(id)
+            : reject(new this.error.InternalServerError('Tokens are different'))
+        })
+        .then(user => resolve(user))
+        .catch(err => reject(err))
+    });
+  }
+
   logout(user) {
     return new Promise((resolve, reject) => {
       user.token = user.refreshToken = '';

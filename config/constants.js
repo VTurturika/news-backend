@@ -23,7 +23,8 @@ module.exports = {
       '/tag': 'GET',
       '/user/signup': 'POST',
       '/user/login': 'POST',
-      '/user': 'GET'
+      '/user': 'GET',
+      '/user/refresh/:id': 'POST'
     }
   }
 };

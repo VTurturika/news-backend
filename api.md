@@ -540,6 +540,7 @@ Authorization: Bearer <jwt token>
 | ----------- | ------ | -------- |
 | [Signup](#signup) | POST | /user/signup |
 | [Login](#login) | POST | /user/login |
+| [Refresh token](#refresh-token) | POST | /user/refresh/:id |
 | [Logout](#logout) | POST | /user/logout |
 | [Get all users](#get-all-users) | GET | /user |
 | [Update user](#update-user) | PUT | /user/:id |
@@ -608,6 +609,45 @@ Authorization: Bearer <jwt token>
     "message": "Wrong username or password"
 }
 ```
+
+### Refresh token
+#### Request
+```javascript
+{
+	"token": "token",
+	"refreshToken": "refreshToken"
+}
+```
+
+#### Response
+* 200
+```javascript
+{
+    "_id": "user id",
+    "username": "username",
+    "firstname": "first name",
+    "lastname": "last name",
+    "finishedAt": "2018-01-20T14:09:40.197Z",
+    "refreshToken": "jwt refresh token",
+    "startedAt": "2018-01-20T13:09:40.197Z",
+    "token": "jwt token"
+}
+```
+* 400
+```javascript
+{
+    "code": "BadRequest",
+    "message": "Invalid token or refreshToken"
+}
+```
+* 404
+```javascript
+{
+    "code": "NotFound",
+    "message": "User not found"
+}
+```
+
 
 ### Logout
 #### Auth

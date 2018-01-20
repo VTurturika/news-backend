@@ -56,6 +56,19 @@ class JwtService {
     });
   }
 
+  verifyRefreshToken(refreshToken, suffix) {
+    return new Promise((resolve, reject) => {
+      jwt.verify(refreshToken, instance.secret + suffix, err => {
+        if(err) {
+          reject(new error.UnauthorizedError('Invalid token or refreshToken'));
+        }
+        else {
+          resolve()
+        }
+      })
+    })
+  }
+
   generateTokens(payload) {
     payload.iat = Math.floor(Date.now() / 1000);
     payload.exp = Math.floor(Date.now() / 1000) + this.expiresIn;
