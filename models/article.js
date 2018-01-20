@@ -26,18 +26,55 @@ class Article extends Model {
   }
 
   get(id) {
+    let article = null;
     return new Promise((resolve, reject) => {
       this.db.collection('articles')
         .findOne({
           _id: this.createId(id)
         })
-        .then(article => {
-          return article
-            ? resolve(article)
-            : reject(new this.error.NotFoundError('Article not found'));
+        .then(dbArticle => {
+          if(dbArticle && dbArticle.user && dbArticle.categories) {
+            article = dbArticle;
+            return Promise.all([
+              this.getAuthor(dbArticle.user),
+              this.getCategories(dbArticle.categories)
+            ])
+          }
+          return reject(new this.error.NotFoundError('Article not found'))
+        })
+        .then(results => {
+          article.user = results[0];
+          article.categories = results[1];
+          resolve(article);
         })
         .catch(err => reject(err))
     })
+  }
+
+  getAuthor(userId) {
+    return new Promise((resolve, reject) => {
+      this.db.collection('users')
+        .findOne({
+          _id: this.createId(userId)
+        })
+        .then(user => resolve(this.hidePassword(user)))
+        .catch(err => reject(err))
+    });
+  }
+
+  getCategories(categories) {
+    return new Promise((resolve, reject) => {
+      categories.forEach((category, i, arr) => {
+        arr[i] = this.createId(category);
+      });
+      this.db.collection('categories')
+        .find({
+          _id: {$in: categories}
+        })
+        .toArray()
+        .then(categories => resolve(categories))
+        .catch(err => reject(err));
+    });
   }
 
   update(id, newData) {

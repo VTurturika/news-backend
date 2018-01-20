@@ -43,11 +43,6 @@ class User extends Model {
     });
   }
 
-  hidePassword(user) {
-    delete user.password;
-    return user;
-  }
-
   create(user) {
     return new Promise((resolve, reject) => {
       Promise.resolve()

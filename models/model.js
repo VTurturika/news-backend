@@ -38,6 +38,14 @@ class Model {
     return this.ObjectID.createFromHexString(idAsHex);
   }
 
+  hidePassword(user) {
+    if(user && user.password) {
+      delete user.password;
+    }
+
+    return user;
+  }
+
   arrayToObject(array) {
     return array.reduce((result, item) => {
       result[item] = true;
