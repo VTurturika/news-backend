@@ -119,6 +119,20 @@ class User extends Model {
     });
   }
 
+  getAll() {
+    return new Promise((resolve, reject) => {
+      this.db.collection('users')
+        .find()
+        .project({username: 1})
+        .toArray()
+        .then(users => {
+          return users
+            ? resolve(users)
+            : reject()
+        })
+    });
+  }
+
   update(id, user) {
     return new Promise((resolve, reject) => {
       delete user.username;

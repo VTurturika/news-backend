@@ -22,7 +22,8 @@ module.exports = {
       '/category': 'GET',
       '/tag': 'GET',
       '/user/signup': 'POST',
-      '/user/login': 'POST'
+      '/user/login': 'POST',
+      '/user': 'GET'
     }
   }
 };

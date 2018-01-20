@@ -77,7 +77,10 @@ class UserController extends Controller {
   }
 
   getAll(req, res) {
-
+    Promise.resolve()
+      .then(() => instance.model.getAll())
+      .then(users => res.send(users))
+      .catch(err => res.send(err));
   }
 }
 
