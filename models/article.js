@@ -11,7 +11,8 @@ class Article extends Model {
     ]);
   }
 
-  create(article) {
+  create(article, userId) {
+    article.user = userId;
     return new Promise((resolve, reject) => {
       this.db.collection('articles')
         .insertOne(article)
@@ -28,7 +29,7 @@ class Article extends Model {
     return new Promise((resolve, reject) => {
       this.db.collection('articles')
         .findOne({
-          _id: this.ObjectID.createFromHexString(id)
+          _id: this.createId(id)
         })
         .then(article => {
           return article
@@ -45,7 +46,7 @@ class Article extends Model {
         .then(() => this.get(id)) // try to get article
         .then(article => this.db.collection('articles') //update article
           .updateOne({
-              _id: this.ObjectID.createFromHexString(id)
+              _id: this.createId(id)
             },
             this.prepareForUpdate(newData, article)
           )

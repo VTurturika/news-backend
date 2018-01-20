@@ -27,7 +27,10 @@ class JwtController extends Controller {
         .then(() => instance.jwt.extractToken(req))
         .then(token => instance.jwt.verifyToken(token))
         .then(verified => instance.model.checkSession(verified))
-        .then(() => next())
+        .then(userId => {
+          req.userId = userId;
+          return next();
+        })
         .catch(err => res.send(401, err));
     }
   }

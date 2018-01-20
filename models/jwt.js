@@ -22,7 +22,7 @@ class Jwt extends Model {
             reject(new this.error.UnauthorizedError('Invalid token'))
           }
           else {
-            resolve();
+            resolve(verified._id);
           }
         })
     })

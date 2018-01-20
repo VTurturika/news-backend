@@ -28,7 +28,7 @@ class ArticleController extends Controller {
       .then(() => instance.isExistField(req, 'text'))
       .then(() => instance.isExistField(req, 'description_image'))
       .then(() => instance.model.filterAllowedFields(req.body))
-      .then(article => instance.model.create(article))
+      .then(article => instance.model.create(article, req.userId))
       .then(article => res.send(article))
       .catch(err => res.send(err))
   }
