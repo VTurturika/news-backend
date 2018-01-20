@@ -25,7 +25,7 @@ class JwtService {
     }
     else {
       let token = instance.extractToken(req);
-      if(token && this.verifyToken(token)) {
+      if(token && instance.verifyToken(token)) {
         return next();
       }
       res.send(new error.UnauthorizedError('Access forbidden'))
