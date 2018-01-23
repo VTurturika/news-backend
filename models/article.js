@@ -84,6 +84,7 @@ class Article extends Model {
         .then(dbArticle => {
           if(dbArticle && dbArticle.user && dbArticle.categories) {
             article = dbArticle;
+            article.createdAt = dbArticle._id.getTimestamp();
             return Promise.all([
               this.getAuthor(dbArticle.user),
               this.getCategories(dbArticle.categories)
