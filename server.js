@@ -7,7 +7,10 @@ const init = require('./config/init');
 
 server.use(restify.plugins.bodyParser());
 server.use(restify.plugins.queryParser());
-server.use(restify.plugins.fullResponse());
+server.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  next();
+});
 
 Promise.resolve()
   .then(() => init.database(constants))
