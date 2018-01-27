@@ -70,7 +70,9 @@ class Article extends Model {
     }
 
     let result = {};
-    result['$' + mode] = filters;
+    if(Object.keys(filters).length > 0) {
+      result['$' + mode] = filters;
+    }
     return result
   }
 
